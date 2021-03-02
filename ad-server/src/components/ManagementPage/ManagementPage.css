@@ -1,0 +1,43 @@
+.container-fluid {
+  font-family: "Lato", sans-serif;
+  width: auto;
+  min-width: 860px;
+  padding: 0;
+}
+
+.header {
+  padding: 0.5rem 1rem;
+  margin: 0 0 0.5rem 0;
+  background-color: #fbfbfb;
+  box-shadow: 0 2px 4px #e0e0e0;
+  align-content: flex-end;
+}
+h6 {
+  font-weight: 600;
+  margin: 0 0.5em;
+  vertical-align: baseline;
+  display: inline-block;
+}
+
+.headerRight {
+  margin-top: 1em;
+}
+
+.pageTitle {
+  float: left;
+  margin-left: 0.6rem;
+  margin-top: 0.6rem;
+}
+
+.pageTitle:hover {
+  cursor: default;
+}
+
+.button {
+  float: right;
+  margin: 1rem;
+}
+
+.sidebar {
+  max-width: 230px;
+}

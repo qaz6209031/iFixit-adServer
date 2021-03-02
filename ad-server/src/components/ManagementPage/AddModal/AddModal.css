@@ -1,0 +1,64 @@
+.preview {
+  width: 100%;
+  height: 200px;
+  text-align: center;
+  margin: auto;
+  background-image: url(https://images.app.goo.gl/1eGeix2Q7nznNdJJ7);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border: 1px solid #e0e0e0;
+  background-color: #eee;
+  border-radius: 2px;
+}
+
+.previewText {
+  color: #fff;
+  padding: 2em auto;
+  padding-top: 2em;
+  padding-left: 1em;
+}
+
+.fakeButton {
+  background-color: rgb(8, 95, 217);
+  color: #fff;
+  border-radius: 4px;
+  padding: 0.5em;
+  margin: 0 auto;
+  width: auto;
+  max-width: 260px;
+  display: inline-block;
+  text-align: center !important;
+  font-weight: 600;
+}
+
+.fakeButtonLeft {
+  background-color: rgb(8, 95, 217);
+  color: #fff;
+  border-radius: 4px;
+  padding: 0.5em 1em;
+  margin: 0 auto 0 1em;
+  width: auto;
+  max-width: 260px;
+  display: inline-block;
+  text-align: center !important;
+  font-weight: 600;
+}
+
+.fakeButton p,
+.fakeButtonLeft p {
+  margin: 0;
+}
+
+.form-label,
+.form-file-label {
+  padding-top: 0.5em;
+}
+
+.form-control-file:hover {
+  cursor: pointer;
+}
+
+h3 {
+  font-weight: 800;
+}

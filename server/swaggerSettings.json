@@ -1,0 +1,576 @@
+{
+    "swaggerDefinition": {
+        "openapi": "3.0.0",
+        "info": {
+            "title": "Ifixit Ad Server",
+            "version": "1.0.0",
+            "description": "An API for IFixit's Ad Server, created by Team 03-Alphas",
+            "license": {
+                "name": "MIT",
+                "url": "https://choosealicense.com/licenses/mit/"
+            },
+            "contact": {
+                "name": "No reply",
+                "url": "https://swagger.io"
+            }
+        },
+        "servers": [
+            {
+                "url": "http://localhost:3001/"
+            }
+        ],
+        "tags": [
+            {
+                "name": "ad",
+                "description": "Everything about ad"
+            },
+            {
+                "name": "campaign",
+                "description": "Everything about campaign"
+            },
+            {
+                "name": "image",
+                "description": "Everything about image"
+            }
+        ],
+        "components": {
+            "schemas": {
+                "Impressions": {
+                    "type": "object",
+                    "properties": {
+                        "clicks": {
+                            "type": "integer",
+                            "format": "int32",
+                            "example": 0
+                        },
+                        "seen": {
+                            "type": "integer",
+                            "format": "int32",
+                            "example": 0
+                        },
+                        "ctr": {
+                            "type": "number",
+                            "format": "double",
+                            "example": 0
+                        }
+                    }
+                },
+                "Ad": {
+                    "type": "object",
+                    "properties": {
+                        "adName": {
+                            "type": "string",
+                            "example":"iPhoneWinter2020"
+                        },
+                        "campaign": {
+                            "type": "string",
+                            "example": "7QKUcWNNRkIQ89jUzqo7"
+                        },
+                        "size": {
+                            "type": "string",
+                            "enum": ["small", "medium", "large"]
+                        },
+                        "title": {
+                            "type": "string",
+                            "example": "Repair your iPhone with just this one kit"
+                        },
+                        "subtitle": {
+                            "type": "string",
+                            "example": "iFixIt has all the tools you need to repair your iPhone yourself"
+                        },
+                        "buttonAlign": {
+                            "type": "string",
+                            "enum": ["left", "center", "right"]
+                        },
+                        "buttonText": {
+                            "type": "string",
+                            "example": "Click here"
+                        },
+                        "url": {
+                            "type": "string"
+                        },
+                        "altText": {
+                            "type": "string"
+                        },
+                        "imageFile": {
+                            "type": "TODO"
+                        },
+                        "statistics": {
+                            "type": "object",
+                            "$ref": "#/components/schemas/Impressions"
+                        }
+                    }
+                },
+                "Campaign": {
+                    "type": "object",
+                    "properties": {
+                        "campaignName": {
+                            "type": "string",
+                            "example": "TestCampaignName"
+                        }
+                    }
+                },
+                "Error": {
+                    "type": "object",
+                    "properties": {
+                        "error": {
+                            "type": "string",
+                            "example": "Ad with given ad ID already exists"
+                        },
+                        "errorCode": {
+                            "type": "number",
+                            "example": 403
+                        }
+                    }
+                }
+            }
+            
+        },
+        "paths": {
+            "/campaign": {
+                "get": {
+                    "tags": ["campaign"],
+                    "summary": "Get a list of campaign objects",
+                    "parameters": [
+                        {
+                            "in": "query",
+                            "name": "title",
+                            "schema": {
+                                "type": "string"
+                            },
+                            "required": false,
+                            "description": "The title for a specific campaign or a list of campaigns",
+                            "example": "Winter2020"
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "Successful Operation",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/Campaign"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "post": {
+                    "tags": ["campaign"],
+                    "summary": "Create a new campaign",
+                    "requestBody": {
+                        "required": true,
+                        "description": "If the campaign already exists, update with new campaign",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "campaignName": {
+                                            "type": "string",
+                                            "example": "TestCampaignName"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "Successful Operation",
+                            "content": {
+                                "text/plain": {
+                                    "schema": {
+                                        "type": "string",
+                                        "example": "Success"
+                                    }
+                                }
+                            }
+                        },
+                        "500": {
+                            "description": "Improper data inputs"
+                        }
+                    }
+                }
+            },
+            "/campaign/{campaignId}": {
+                "get": {
+                    "tags": ["campaign"],
+                    "summary": "Get the campaign by ID",
+                    "parameters": [
+                        {
+                            "in": "path",
+                            "name": "campaignId",
+                            "schema": {
+                                "type": "string"
+                            },
+                            "required": true,
+                            "description": "ID of campaign to return",
+                            "example": "7QKUcWNNRkIQ89jUzqo2"
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "Successful Operation",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/Campaign"
+                                    }
+                                }
+                            }
+                        },
+                        "404": {
+                            "description": "Campaign does not exist by given ID"
+                        },
+                        "500": {
+                            "description": "Error retrieving info"
+                        }
+                    }
+                },
+                "put": {
+                    "tags": ["campaign"],
+                    "summary": "Update an existing campaign",
+                    "requestBody": {
+                        "required": true,
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Campaign"
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "Successful Operation",
+                            "content": {
+                                "text/plain": {
+                                    "schema": {
+                                        "type": "string",
+                                        "example": "Success"
+                                    }
+                                }
+                            }
+                        },
+                        "500": {
+                            "description": "Improper data inputs"
+                        }
+                    }
+                },
+                "delete": {
+                    "tags": ["campaign"],
+                    "summary": "Delete a campaign",
+                    "parameters": [
+                        {
+                            "name": "campaignId",
+                            "in": "path",
+                            "description": "ID of campaign to delete",
+                            "required": true,
+                            "schema": {
+                                "type": "string"
+                            },
+                            "example": "7QKUcWNNRkIQ89jUzqo2"
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "Successful Operation",
+                            "content": {
+                                "text/plain": {
+                                    "schema": {
+                                        "type": "string",
+                                        "example": "Success"
+                                    }
+                                }
+                            }
+                        },
+                        "500": {
+                            "description": "Improper data inputs"
+                        }
+                    }
+                }
+            },
+            "/ad": {
+                "get": {
+                    "tags": ["ad"],
+                    "summary": "Get a list of ad objects",
+                    "parameters": [
+                        {
+                            "name": "title",
+                            "in": "query",
+                            "schema": {
+                                "type": "string"
+                            },
+                            "required": false,
+                            "example": "None"
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "Successful Operation",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "array",
+                                        "items": {
+                                            "$ref": "#/components/schemas/Ad"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "post": {
+                    "tags": ["ad"],
+                    "summary": "Create a new ad",
+                    "description": "Creates a new ad if one does not exist",
+                    "requestBody": {
+                        "required": true,
+                        "description": "Ad object that needs to be added to the database",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Ad"
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "Successful Operation",
+                            "content": {
+                                "text/plain": {
+                                    "schema": {
+                                        "type": "string",
+                                        "example": "Success"
+                                    }
+                                }
+                            }
+                        },
+                        "403": {
+                            "description": "The ad with a given Ad ID already exists"
+                        },
+                        "503": {
+                            "description": "Server Error"
+                        }
+                    }
+                }
+            },
+            "/ad/{adId}": {
+                "get": {
+                    "tags": ["ad"],
+                    "summary": "Get the ad by ID",
+                    "parameters": [
+                        {
+                            "in": "path",
+                            "name": "adId",
+                            "description": "ID of ad to return",
+                            "required": true,
+                            "schema": {
+                                "type": "string"
+                            },
+                            "example": "vEXzgrwMg1TIsBPacmo6"
+                        },
+                        {
+                            "in": "query",
+                            "name": "impression",
+                            "required": false,
+                            "schema": {
+                                "type": "boolean"
+                            },
+                            "example": true
+                        },
+                        {
+                            "in": "query",
+                            "name": "clicked",
+                            "required": false,
+                            "schema": {
+                                "type": "boolean"
+                            },
+                            "example": true
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "Successful Operation",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "$ref": "#/components/schemas/Ad"
+                                    }
+                                }
+                            }
+                        },
+                        "500": {
+                            "description": "Error retrieving info"
+                        }
+                    }
+                },
+                "put": {
+                    "tags": ["ad"],
+                    "summary": "Update an existing ad, the adId field is required to send a PUT",
+                    "requestBody": {
+                        "required": true,
+                        "description": "Ad object that needs to be updated to the database",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",   
+                                    "properties": {
+                                        "adName": {
+                                            "type": "string",
+                                            "example":"iPhoneWinter2020"
+                                        },
+                                        "campaign": {
+                                            "type": "string",
+                                            "example": "7QKUcWNNRkIQ89jUzqo7"
+                                        },
+                                        "size": {
+                                            "type": "string",
+                                            "enum": ["small", "medium", "large"]
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "example": "Repair your iPhone with just this one kit"
+                                        },
+                                        "subtitle": {
+                                            "type": "string",
+                                            "example": "iFixIt has all the tools you need to repair your iPhone yourself"
+                                        },
+                                        "buttonAlign": {
+                                            "type": "string",
+                                            "enum": ["left", "center", "right"]
+                                        },
+                                        "buttonText": {
+                                            "type": "string",
+                                            "example": "Click here"
+                                        },
+                                        "url": {
+                                            "type": "string"
+                                        },
+                                        "altText": {
+                                            "type": "string"
+                                        },
+                                        "imageFile": {
+                                            "type": "TODO"
+                                        },
+                                        "statistics": {
+                                            "type": "object",
+                                            "$ref": "#/components/schemas/Impressions"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "Successful Operation",
+                            "content": {
+                                "text/plain": {
+                                    "schema": {
+                                        "type": "string",
+                                        "example": "Success"
+                                    }
+                                }
+                            }
+                        },
+                        "404": {
+                            "description": "Cannot find an ad with a given ID"
+                        },
+                        "500": {
+                            "description": "Improper data inputs"
+                        }
+                    }
+                },
+                "delete": {
+                    "tags": ["ad"],
+                    "summary": "Delete an ad",
+                    "parameters": [
+                        {
+                            "name": "adId",
+                            "in": "path",
+                            "description": "ID of ad to delete",
+                            "required": true,
+                            "schema": {
+                                "type": "string"
+                            },
+                            "example": "xGpTCGJSIDX0Z8RbMbkb"
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "Successful Operation",
+                            "content": {
+                                "text/plain": {
+                                    "schema": {
+                                        "type": "string",
+                                        "example": "Success"
+                                    }
+                                }
+                            }
+                        },
+                        "500": {
+                            "description": "Improper data inputs"
+                        }
+                    }
+                }
+            },
+            "/image/{imageToken}": {
+                "get": {
+                    "tags": ["image"],
+                    "summary": "Retrieves an image related to a particular ad by its token",
+                    "parameters": [
+                        {
+                            "in": "path",
+                            "name": "imageToken",
+                            "description": "An image's unique identifier. The identifier is stored as part of the ad object",
+                            "required": true,
+                            "schema": {
+                                "type": "string"
+                            },
+                            "example": "1607128589851-ad_1_image.jpg"
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "Successful Operation",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "string"
+                                    },
+                                    "example": "https://firebasestorage.googleapis.com/v0/b/ifixit-ad-server-edd98.appspot.com/o/1607128589851-RAID.jpg?alt=media&token=b6621b77-4e18-4526-ab2d-e378efe2dad1"
+                                }
+                            }
+                        },
+                        "404": {
+                            "description": "Ad token not found",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object"
+                                    },
+                                    "example": {
+                                        "error": "Image does not exist",
+                                        "errorCode": 404
+                                    }
+                                }
+                            }
+                        },
+                        "500": {
+                            "description": "Error retrieving info"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "apis": ["./*.js"]
+}
